@@ -5,38 +5,38 @@
 </h1>
 
 <div align="center">
-  <a href="https://github.com/yourusername">
-    <img src="https://skillicons.dev/icons?i=react,tailwind,nodejs,express,postgres,github" alt="Tech Stack" width="300" style="padding: 15px 0;">
-  </a>
+  <img src="https://skillicons.dev/icons?i=react,tailwind,nodejs,express,postgres,github" alt="Tech Stack" width="250">
 </div>
 
-<h3 align="center">
-  An AI-powered SaaS platform bringing together creative and productivity tools powered by artificial intelligence.
-</h3>
+<p align="center">
+  An AI-powered SaaS platform for creative and productivity tools.
+</p>
 
 ---
 
-## 🕸️ Live Demo
+<div align="center">
+  <img src="./client/src/assets/ss.png" alt="Crafty.ai screenshot" width="500">
+</div>
 
-Experience the live application: [crafty.ai](https://crafty-ai.vercel.app/)
+Live: [crafty.ai](https://crafty-ai.vercel.app/)
 
 ## 🌟 Features
 
-- 📝 **Article Generator** – Input a title and desired length to generate full articles
-- 📌 **Blog Title Generator** – Generate engaging blog titles based on keywords
-- 🖼️ **AI Image Generator** – Turn text prompts into unique images using generative AI
-- 🔍 **Background Remover** – Upload an image to get a version with the background removed
-- ❌ **Image Object Remover** – Remove specified objects from images using AI
-- 📊 **Resume Analyzer** – Upload a resume and get detailed analysis and suggestions
+- **Article Generator** – Generate articles from titles
+- **Blog Title Generator** – Create engaging blog titles
+- **AI Image Generator** – Generate images from text prompts
+- **Background Remover** – Remove image backgrounds
+- **Image Object Remover** – Remove objects from images
+- **Resume Analyzer** – Analyze and suggest resume improvements
 
 ## 🛠 Tech Stack
 
-- **Frontend**: React.js with Tailwind CSS
-- **Backend**: Node.js with Express.js
-- **AI Services**: OpenAI API, ClipDrop API
-- **Storage**: Cloudinary for image hosting
+- **Frontend**: React.js, Tailwind CSS
+- **Backend**: Node.js, Express.js
+- **AI Services**: Gemini API, ClipDrop API
+- **Storage**: Cloudinary
 - **Authentication**: Clerk
-- **Database**: Neon (serverless Postgres)
+- **Database**: Neon (Postgres)
 
 ---
 
@@ -44,7 +44,7 @@ Experience the live application: [crafty.ai](https://crafty-ai.vercel.app/)
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
+- Node.js (v18+)
 - npm or yarn
 
 ### Setup
@@ -63,7 +63,7 @@ Experience the live application: [crafty.ai](https://crafty-ai.vercel.app/)
    npm install
    ```
 
-   Create a `.env` file with:
+   Create `.env`:
 
    ```
    VITE_CLERK_PUBLISHABLE_KEY=your_key_here
@@ -77,7 +77,7 @@ Experience the live application: [crafty.ai](https://crafty-ai.vercel.app/)
    npm install
    ```
 
-   Create a `.env` file with:
+   Create `.env`:
 
    ```
    PORT=your_port
@@ -91,16 +91,14 @@ Experience the live application: [crafty.ai](https://crafty-ai.vercel.app/)
    CLOUDINARY_API_SECRET=your_secret_here
    ```
 
-4. **Running the Application**
-   - In one terminal (frontend):
+4. **Run Application**
+   - Frontend:
      ```bash
      cd client
      npm run dev
      ```
-   - In another terminal (backend):
+   - Backend:
      ```bash
      cd server
      npm run dev
      ```
-
----
