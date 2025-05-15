@@ -15,7 +15,7 @@
 ---
 
 <div align="center">
-  <img src="./client/src/assets/ss.png" alt="Crafty.ai screenshot" width="500">
+  <img src="https://github.com/soumadip-dev/Crafty.ai-PERN/blob/main/client/src/assets/SS.png" alt="Crafty.ai screenshot" width="500">
 </div>
 
 Live: [crafty.ai](https://crafty-ai.vercel.app/)
