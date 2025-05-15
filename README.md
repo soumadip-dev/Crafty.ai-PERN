@@ -12,13 +12,13 @@
   An AI-powered SaaS platform for creative and productivity tools.
 </p>
 
----
-
 <div align="center">
-  <img src="https://github.com/soumadip-dev/Crafty.ai-PERN/blob/main/client/src/assets/SS.png" alt="Crafty.ai screenshot" width="500">
+  <img src="https://github.com/soumadip-dev/Crafty.ai-PERN/blob/main/client/src/assets/SS.png" alt="Crafty.ai screenshot" width="900">
 </div>
 
-Live: [crafty.ai](https://crafty-ai.vercel.app/)
+## Live:
+
+[crafty.ai](https://crafty-ai.vercel.app/)
 
 ## 🌟 Features
 
