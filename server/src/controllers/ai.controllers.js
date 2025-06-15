@@ -1,9 +1,12 @@
+import dotenv from "dotenv";
 import { clerkClient } from "@clerk/express";
 import sql from "../configs/db.js";
 import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
 import OpenAI from "openai";
 import axios from "axios";
+
+dotenv.config();
 
 // Create an instance of the OpenAI API
 const AI = new OpenAI({
@@ -215,7 +218,6 @@ export const generateImage = async (req, res) => {
       data,
       "binary",
     ).toString("base64")}`;
-    
   } catch (error) {
     console.error("Error generating image:", error.message);
 

@@ -3,8 +3,11 @@ import cors from "cors";
 import { clerkMiddleware, requireAuth } from "@clerk/express";
 import dotenv from "dotenv";
 import aiRoutes from "./routes/ai.routes.js";
+import connectCloudinary from "./configs/cloudinary.js";
 
 const app = express();
+
+await connectCloudinary();
 
 // Enable CORS to allow requests from other domains
 app.use(cors());
