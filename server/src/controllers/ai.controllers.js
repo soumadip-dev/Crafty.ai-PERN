@@ -10,6 +10,7 @@ const AI = new OpenAI({
   baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
 });
 
+// Controller to Generate article
 export const generateArticle = async (req, res) => {
   try {
     // Get the user ID from the request object added by the clerk
@@ -93,6 +94,7 @@ export const generateArticle = async (req, res) => {
   }
 };
 
+// Controller to Generate blog title
 export const generateBlogTitle = async (req, res) => {
   try {
     // Get the user ID from the request object added by the clerk
@@ -117,7 +119,7 @@ export const generateBlogTitle = async (req, res) => {
       );
     }
 
-    // Generate the article using the OpenAI API
+    // Generate the blog title using the OpenAI API
     const response = await AI.chat.completions.create({
       model: "gemini-2.0-flash",
       messages: [
@@ -132,7 +134,7 @@ export const generateBlogTitle = async (req, res) => {
 
     const content = response.choices[0].message.content;
 
-    // Insert the article into the database
+    // Insert the blog title into the database
     await sql`
       INSERT INTO creations (user_id, prompt, content, type) 
       VALUES (${userId}, ${prompt}, ${content}, 'blog-title')
@@ -149,7 +151,7 @@ export const generateBlogTitle = async (req, res) => {
       });
     }
 
-    // Return the generated article
+    // Return the generated blog title
     return res
       .status(200)
       .json(
