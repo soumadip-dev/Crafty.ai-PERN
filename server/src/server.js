@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { clerkMiddleware, requireAuth } from "@clerk/express";
 import dotenv from "dotenv";
+import aiRoutes from "./routes/ai.routes.js";
 
 const app = express();
 
@@ -29,6 +30,9 @@ app.get("/", (req, res) => {
 
 // Apply authentication middleware to all routes
 app.use(requireAuth());
+
+// Routes
+app.use("/api/v1/ai", aiRoutes);
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
