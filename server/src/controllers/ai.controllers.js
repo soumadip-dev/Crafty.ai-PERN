@@ -5,6 +5,7 @@ import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
 import OpenAI from "openai";
 import axios from "axios";
+import { v2 as cloudinary } from "cloudinary";
 
 dotenv.config();
 
@@ -181,6 +182,7 @@ export const generateBlogTitle = async (req, res) => {
       );
   }
 };
+
 // Controller to Generate Image
 export const generateImage = async (req, res) => {
   try {
@@ -201,6 +203,7 @@ export const generateImage = async (req, res) => {
       );
     }
 
+    // Generate the image using the ClipDrop API
     const formData = new FormData();
     formData.append("prompt", prompt);
     const { data } = await axios.post(
@@ -218,6 +221,25 @@ export const generateImage = async (req, res) => {
       data,
       "binary",
     ).toString("base64")}`;
+
+    // Upload the image to Cloudinary
+    const { secure_url } = await cloudinary.uploader.upload(base64Image);
+
+    // Insert the image into the database
+    await sql`
+      INSERT INTO creations (user_id, prompt, content, type,publish) 
+      VALUES (${userId}, ${prompt}, ${secure_url}, 'image',${publish ?? false})
+    `;
+    // Return the generated image
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { content: secure_url },
+          "Image generated successfully",
+        ),
+      );
   } catch (error) {
     console.error("Error generating image:", error.message);
 
