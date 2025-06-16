@@ -7,6 +7,8 @@ import { ApiResponse } from "../utils/api-response.js";
 import OpenAI from "openai";
 import axios from "axios";
 import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
+import pdf from "pdf-parse/lib/pdf-parse.js";
 
 // Load environment variables
 dotenv.config();
@@ -417,6 +419,119 @@ export const removeImageObject = async (req, res) => {
       .status(500)
       .json(
         new ApiError(500, "Something went wrong while removing the object"),
+      );
+  }
+};
+
+// Controller to Resume Review
+export const resumeReview = async (req, res) => {
+  try {
+    // Get the user ID from the request object added by the clerk
+    const { userId } = req.auth();
+
+    // Get the resume from Multer
+    const resume = req.file;
+    if (!resume) {
+      throw new ApiError(400, "No resume file uploaded");
+    }
+
+    // Get the plan from the request object added by the auth middleware
+    const plan = req.plan;
+
+    // Only allow premium users to generate images
+    if (plan !== "premium") {
+      throw new ApiError(
+        403,
+        "This feature is only available to premium subscribers.",
+      );
+    }
+
+    // Check if the resume size is greater than 5mb and throw an error
+    if (resume.size > 5 * 1024 * 1024) {
+      throw new ApiError(400, "Resume file size exceeds allowed size (5MB)");
+    }
+
+    // Convert PDF to buffer
+    const dataBuffer = fs.readFileSync(resume.path);
+
+    // convert buffer to text using pdf-parse
+    const pdfData = await pdf(dataBuffer);
+
+    // Generate the resume review prompt
+    const prompt = `
+Please review the following resume and provide **constructive feedback** focusing on the following aspects:
+
+- **Content Relevance**: Is the information appropriate and aligned with the candidate's goals?
+- **Clarity**: Is the language clear, concise, and professional?
+- **Structure & Flow**: Is the resume well-organized and easy to read?
+
+Your response should be formatted in **Markdown**, including:
+- Headings (e.g., Strengths, Weaknesses, Areas for Improvement)
+- Bullet points
+- **Bold text** where appropriate for emphasis
+
+Be specific in your feedback, and suggest concrete improvements where possible.
+
+Resume Content:
+${pdfData.text}
+`;
+
+    // Generate the resume review using the Gemini API
+    const response = await AI.chat.completions.create({
+      model: "gemini-2.0-flash",
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      temperature: 0.7,
+      max_tokens: 1000,
+    });
+
+    const content = response.choices[0].message.content;
+
+    // Insert the resume into the database
+    await sql`
+        INSERT INTO creations (user_id, prompt, content, type) 
+        VALUES (${userId}, ${"Review the uploaded resume"}, ${content}, 'resume-review')
+      `;
+
+    // TODO: Delete the uploaded file after processing
+    // //  fs.unlinkSync(resume.path);
+
+    // Return the resume review
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { content },
+          "Resume review generated successfully",
+        ),
+      );
+  } catch (error) {
+    console.error("Error removing object:", error.message);
+
+    // TODO: Ensure file is deleted even if processing fails
+    //// if (resume.path && fs.existsSync(resume.path)) {
+    //// fs.unlinkSync(resume.path);
+    //// }
+
+    // Check if the error was already an ApiError (e.g., from free_usage check) then return
+    if (error instanceof ApiError) {
+      return res.status(error.statusCode).json({
+        success: false,
+        message: error.message,
+        errors: error.errors,
+      });
+    }
+
+    // If not, return a generic 500 error
+    return res
+      .status(500)
+      .json(
+        new ApiError(500, "Something went wrong while reviewing the resume"),
       );
   }
 };
