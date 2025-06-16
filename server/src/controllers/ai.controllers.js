@@ -1,3 +1,4 @@
+// Import necessary modules
 import dotenv from "dotenv";
 import { clerkClient } from "@clerk/express";
 import sql from "../configs/db.js";
@@ -7,6 +8,7 @@ import OpenAI from "openai";
 import axios from "axios";
 import { v2 as cloudinary } from "cloudinary";
 
+// Load environment variables
 dotenv.config();
 
 // Create an instance of the OpenAI API
@@ -23,6 +25,8 @@ export const generateArticle = async (req, res) => {
 
     // Get the prompt and length from the request body
     const { prompt, length } = req.body;
+    if (!prompt) throw new ApiError(400, "Prompt is required.");
+    if (!length) throw new ApiError(400, "Length is required.");
 
     // Get the plan from the request object added by the auth middleware
     const plan = req.plan;
@@ -107,6 +111,7 @@ export const generateBlogTitle = async (req, res) => {
 
     // Get the prompt and length from the request body
     const { prompt } = req.body;
+    if (!prompt) throw new ApiError(400, "Prompt is required.");
 
     // Get the plan from the request object added by the auth middleware
     const plan = req.plan;
@@ -191,6 +196,8 @@ export const generateImage = async (req, res) => {
 
     // Get the prompt and style from the request body
     const { prompt, publish } = req.body;
+    if (!prompt) throw new ApiError(400, "Prompt is required.");
+    if (publish === undefined) throw new ApiError(400, "Publish is required.");
 
     // Get the plan from the request object added by the auth middleware
     const plan = req.plan;
@@ -332,7 +339,7 @@ export const removeImageBackground = async (req, res) => {
 };
 
 // Controller to Remove any Object From Image
-export const removeObject = async (req, res) => {
+export const removeImageObject = async (req, res) => {
   try {
     // Get the user ID from the request object added by the clerk
     const { userId } = req.auth();
