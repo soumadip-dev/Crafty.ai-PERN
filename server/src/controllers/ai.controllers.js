@@ -330,3 +330,78 @@ export const removeImageBackground = async (req, res) => {
       );
   }
 };
+
+// Controller to Remove any Object From Image
+export const removeObject = async (req, res) => {
+  try {
+    // Get the user ID from the request object added by the clerk
+    const { userId } = req.auth();
+
+    // Get the image from Multer
+    const { image } = req.file;
+    if (!image) {
+      throw new ApiError(400, "No image file uploaded");
+    }
+
+    // Get the object from the request body
+    const { object } = req.body;
+
+    if (!object) {
+      throw new ApiError(400, "No object specified for removal");
+    }
+
+    // Get the plan from the request object added by the auth middleware
+    const plan = req.plan;
+
+    // Only allow premium users to generate images
+    if (plan !== "premium") {
+      throw new ApiError(
+        403,
+        "This feature is only available to premium subscribers.",
+      );
+    }
+
+    // Upload the image the Cloudinary and remove the object
+    const { public_id } = await cloudinary.uploader.upload(image.path);
+
+    const imageUrl = cloudinary.url(public_id, {
+      transformation: [{ effect: `gen_remove:${object}` }],
+      resource_type: "image",
+    });
+
+    // Insert the image into the database
+    await sql`
+      INSERT INTO creations (user_id, prompt, content, type) 
+      VALUES (${userId}, ${`Removed ${object} From Image`}, ${secure_url}, 'image')
+    `;
+
+    // Return the object removed image
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { content: imageUrl },
+          "Object removed successfully",
+        ),
+      );
+  } catch (error) {
+    console.error("Error removing object:", error.message);
+
+    // Check if the error was already an ApiError (e.g., from free_usage check) then return
+    if (error instanceof ApiError) {
+      return res.status(error.statusCode).json({
+        success: false,
+        message: error.message,
+        errors: error.errors,
+      });
+    }
+
+    // If not, return a generic 500 error
+    return res
+      .status(500)
+      .json(
+        new ApiError(500, "Something went wrong while removing the object"),
+      );
+  }
+};
