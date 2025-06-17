@@ -3,6 +3,7 @@ import cors from "cors";
 import { clerkMiddleware, requireAuth } from "@clerk/express";
 import dotenv from "dotenv";
 import aiRoutes from "./routes/ai.routes.js";
+import userRoutes from "./routes/user.routes.js";
 import connectCloudinary from "./configs/cloudinary.js";
 
 const app = express();
@@ -36,6 +37,7 @@ app.use(requireAuth());
 
 // Routes
 app.use("/api/v1/ai", aiRoutes);
+app.use("/api/v1/user", userRoutes);
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
