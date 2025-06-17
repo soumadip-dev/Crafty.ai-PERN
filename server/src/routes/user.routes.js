@@ -15,6 +15,6 @@ router.get("/get-user-creations", auth, getUserCreations);
 router.get("/get-published-creactions", auth, getPublishedCreations);
 
 // Route to toggle like creation
-router.get("/toggle-like-creation", auth, toggleLikeCreation);
+router.post("/toggle-like-creation", auth, toggleLikeCreation);
 
 export default router;
