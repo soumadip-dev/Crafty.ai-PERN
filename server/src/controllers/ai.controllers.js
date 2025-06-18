@@ -277,7 +277,7 @@ export const removeImageBackground = async (req, res) => {
     const { userId } = req.auth();
 
     // Get the image from Multer (req.file contains the uploaded file)
-    const { image } = req.file;
+    const image = req.file;
     if (!image) {
       throw new ApiError(400, "No image file uploaded");
     }
@@ -352,7 +352,7 @@ export const removeImageObject = async (req, res) => {
     const { userId } = req.auth();
 
     // Get the image from Multer
-    const { image } = req.file;
+    const image = req.file;
     if (!image) {
       throw new ApiError(400, "No image file uploaded");
     }
