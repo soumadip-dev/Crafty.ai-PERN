@@ -1,4 +1,4 @@
-import { Hash, Sparkles } from 'lucide-react';
+import { Hash, Sparkles, Copy } from 'lucide-react';
 import { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '@clerk/clerk-react';
@@ -63,6 +63,18 @@ const BlogTitle = () => {
     }
   };
 
+  const copyToClipboard = () => {
+    navigator.clipboard
+      .writeText(content)
+      .then(() => {
+        toast.success('Article copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy:', err);
+        toast.error('Failed to copy article');
+      });
+  };
+
   return (
     <div className="p-6 flex flex-col md:flex-row gap-6 text-gray-800 items-start">
       {/* Configuration Panel */}
@@ -123,11 +135,23 @@ const BlogTitle = () => {
 
       {/* Output Panel*/}
       <div className="w-full md:w-1/2 lg:w-3/5 bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-green-50 rounded-lg">
-            <Hash className="w-5 h-5 text-green-600" />
+        <div className="flex items-center justify-between gap-3 mb-4 sm:mb-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-green-50 rounded-lg">
+              <Hash className="w-5 h-5 text-green-600" />
+            </div>
+            <h1 className="text-lg sm:text-xl font-semibold">Generated Titles</h1>
           </div>
-          <h1 className="text-lg sm:text-xl font-semibold">Generated Titles</h1>
+          {content && !loading && (
+            <button
+              onClick={copyToClipboard}
+              className="flex items-center gap-1 text-sm px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+              title="Copy to clipboard"
+            >
+              <Copy className="w-4 h-4" />
+              <span>Copy</span>
+            </button>
+          )}
         </div>
         {loading ? (
           <div className="min-h-[300px] sm:min-h-[400px] flex items-center justify-center rounded-lg border border-gray-200">
