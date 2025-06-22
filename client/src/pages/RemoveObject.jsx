@@ -11,7 +11,7 @@ const RemoveObject = () => {
   };
 
   return (
-    <div className="p-6 flex flex-col md:flex-row gap-6 text-gray-800">
+    <div className="p-6 flex flex-col md:flex-row gap-6 text-gray-800 items-start">
       {/* Configuration Panel */}
       <form
         className="w-full md:w-1/2 lg:w-2/5 bg-white rounded-xl border border-gray-200 shadow-sm p-6"
@@ -62,8 +62,8 @@ const RemoveObject = () => {
         </div>
       </form>
 
-      {/* Output Panel */}
-      <div className="w-full md:w-1/2 lg:w-3/5 bg-white rounded-xl border border-gray-200 shadow-sm p-6 flex flex-col">
+      {/* Output Panel*/}
+      <div className="w-full md:w-1/2 lg:w-3/5 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-green-50 rounded-lg">
             <Scissors className="w-5 h-5 text-green-600" />
@@ -71,11 +71,13 @@ const RemoveObject = () => {
           <h1 className="text-xl font-semibold">Processed Image</h1>
         </div>
 
-        <div className="flex-1 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 p-8 text-center">
-          <Scissors className="w-10 h-10 text-gray-300 mb-4" />
-          <p className="text-sm text-gray-500 max-w-md">
-            Upload an image and describe what to remove
-          </p>
+        <div className="min-h-[400px] rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center">
+            <Scissors className="w-10 h-10 text-gray-300 mb-4" />
+            <p className="text-sm text-gray-500 max-w-md">
+              Upload an image and describe what to remove
+            </p>
+          </div>
         </div>
       </div>
     </div>
