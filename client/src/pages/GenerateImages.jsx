@@ -22,8 +22,8 @@ const GenerateImages = () => {
   const [published, setPublished] = useState(false);
 
   return (
-    <div className="p-6 flex flex-col md:flex-row gap-6 text-gray-800">
-      {/* Image Input Configuration Panel */}
+    <div className="p-6 flex flex-col md:flex-row gap-6 text-gray-800 items-start">
+      {/* Configuration Panel */}
       <form
         className="w-full md:w-1/2 lg:w-2/5 bg-white rounded-xl border border-gray-200 shadow-sm p-6"
         onSubmit={onSubmitHandler}
@@ -68,19 +68,20 @@ const GenerateImages = () => {
                 </button>
               ))}
             </div>
-            <div className="my-6 flex items-center gap-2">
-              <label className="relative cursor-pointer">
-                <input
-                  type="checkbox"
-                  onChange={e => setPublished(e.target.checked)}
-                  checked={published}
-                  className="sr-only peer"
-                />
-                <div className="w-9 h-5 bg-slate-300 rounded-full peer-checked:bg-green-500 transition"></div>
-                <span className="absolute left-1 top-1 h-3 w-3 bg-white rounded-full peer-checked:translate-x-4  transition"></span>
-              </label>
-              <p className="text-sm">Make this image public</p>
-            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <label className="relative cursor-pointer">
+              <input
+                type="checkbox"
+                onChange={e => setPublished(e.target.checked)}
+                checked={published}
+                className="sr-only peer"
+              />
+              <div className="w-9 h-5 bg-gray-300 rounded-full peer peer-checked:bg-green-500 transition"></div>
+              <span className="absolute left-1 top-1 h-3 w-3 bg-white rounded-full peer-checked:translate-x-4 transition"></span>
+            </label>
+            <p className="text-sm text-gray-600">Make this image public</p>
           </div>
 
           <button
@@ -93,8 +94,8 @@ const GenerateImages = () => {
         </div>
       </form>
 
-      {/* Generated Image Output Panel */}
-      <div className="w-full md:w-1/2 lg:w-3/5 bg-white rounded-xl border border-gray-200 shadow-sm p-6 flex flex-col">
+      {/* Output Panel*/}
+      <div className="w-full md:w-1/2 lg:w-3/5 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-green-50 rounded-lg">
             <Image className="w-5 h-5 text-green-600" />
@@ -102,11 +103,13 @@ const GenerateImages = () => {
           <h1 className="text-xl font-semibold">Generated Images</h1>
         </div>
 
-        <div className="flex-1 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 p-8 text-center">
-          <Image className="w-10 h-10 text-gray-300 mb-4" />
-          <p className="text-sm text-gray-500 max-w-md">
-            Describe an image and click "Generate Image" to get started.
-          </p>
+        <div className="min-h-[400px] rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center">
+            <Image className="w-10 h-10 text-gray-300 mb-4" />
+            <p className="text-sm text-gray-500 max-w-md">
+              Describe an image and click "Generate Image" to get started
+            </p>
+          </div>
         </div>
       </div>
     </div>
