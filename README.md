@@ -6,7 +6,7 @@
 
 <div align="center">
   <a href="https://github.com/yourusername">
-    <img src="https://skillicons.dev/icons?i=react,tailwind,nodejs,express,prisma,postgres,vercel,supabase,github" alt="Tech Stack" width="410" style="padding: 15px 0;">
+    <img src="https://skillicons.dev/icons?i=react,tailwind,nodejs,express,postgres,github" alt="Tech Stack" width="300" style="padding: 15px 0;">
   </a>
 </div>
 
@@ -23,7 +23,7 @@
 ---
 -->
 
-## 🌟 Features (Planned)
+## 🌟 Features
 
 - 📝 **Article Generator** – Input a title and desired length to generate full articles.
 - 📌 **Blog Title Generator** – Generate engaging blog titles based on keywords.
@@ -38,7 +38,7 @@
 - **Backend**: Node.js with Express.js for API endpoints
 - **AI Services**: OpenAI API, Python-based image processing tools
 - **Storage**: Cloudinary for image hosting and transformations
-- **Authentication**: JWT (JSON Web Tokens) for secure access
-- **Database**: MongoDB for flexible data storage
+- **Authentication**: Clerk for secure user authentication
+- **Database**: Neon (serverless Postgres)
 
 ---
