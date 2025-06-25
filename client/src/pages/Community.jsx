@@ -2,6 +2,7 @@ import { useUser } from '@clerk/clerk-react';
 import { useEffect, useState } from 'react';
 import { Heart } from 'lucide-react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import { useAuth } from '@clerk/clerk-react';
 import { ClipLoader } from 'react-spinners';
 
@@ -26,7 +27,6 @@ const Community = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(data);
 
       if (!data?.success) throw new Error(data?.message || 'Something went wrong');
       setCreations(data?.data?.creations);
@@ -36,6 +36,39 @@ const Community = () => {
       setLoading(false);
     }
   };
+
+  const imageLikeToggle = async id => {
+    try {
+      const token = await getToken();
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const { data } = await axios.post(
+        '/api/v1/user/toggle-like-creation',
+        {
+          id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(data);
+
+      if (data?.success) {
+        toast.success(data?.message);
+        fetchCreations();
+      } else {
+        throw new Error(data?.message || 'Something went wrong');
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || error.message || 'Something went wrong');
+    }
+  };
+
   useEffect(() => {
     if (user) fetchCreations();
   }, [user]);
@@ -65,8 +98,9 @@ const Community = () => {
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-1">
                     <Heart
+                      onClick={() => imageLikeToggle(creation.id)}
                       className={`w-5 h-5 transition-transform hover:scale-110 cursor-pointer ${
-                        creation.likes.includes(user?.id)
+                        creation.likes.includes(user?.id?.toString()) // Convert to string for comparison
                           ? 'fill-red-500 text-red-500'
                           : 'text-white/80 hover:text-white'
                       }`}
