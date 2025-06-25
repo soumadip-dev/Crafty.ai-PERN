@@ -159,7 +159,7 @@ const BlogTitle = () => {
           </div>
         ) : !content ? (
           <div className="min-h-[300px] sm:min-h-[400px] rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 flex flex-col items-center justify-center p-4">
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col items-center text-center"> 
               <Hash className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 mb-3 sm:mb-4" />
               <p className="text-xs sm:text-sm text-gray-500 max-w-[280px] sm:max-w-md">
                 Enter keywords and click "Generate Titles" to get started

@@ -73,45 +73,66 @@ const Community = () => {
     if (user) fetchCreations();
   }, [user]);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <ClipLoader color="#3B82F6" size={40} />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col h-full p-6 gap-6">
-      <h1 className="text-2xl font-semibold text-gray-800">Community Creations</h1>
+    <div className="flex flex-col p-6 gap-6 max-w-7xl mx-auto w-full h-[calc(100vh-80px)]">
+      {' '}
+      {/* Adjusted height */}
+      <h1 className="text-3xl font-bold text-gray-800">Community Creations</h1>
+      <div className="bg-white rounded-xl shadow-sm flex-1 flex flex-col overflow-hidden">
+        {creations.length === 0 ? (
+          <div className="flex items-center justify-center h-full text-gray-500 p-4">
+            No creations found in the community yet.
+          </div>
+        ) : (
+          <section className="p-4 overflow-y-auto h-full">
+            {' '}
+            {/* Changed to h-full */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-2">
+              {' '}
+              {/* Added pb-2 for padding at bottom */}
+              {creations.map((creation, index) => (
+                <div
+                  key={index}
+                  className="relative group aspect-square rounded-xl overflow-hidden transition-all hover:shadow-lg"
+                >
+                  <img
+                    src={creation.content}
+                    alt={creation.prompt}
+                    className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-300"
+                  />
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden h-full">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 overflow-y-auto h-full">
-          {creations.map((creation, index) => (
-            <div
-              key={index}
-              className="relative group aspect-square rounded-lg overflow-hidden transition-all hover:shadow-md"
-            >
-              <img
-                src={creation.content}
-                alt={creation.prompt}
-                className="w-full h-full object-cover"
-              />
+                  <div className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <p className="text-white text-sm font-medium line-clamp-2 mb-2">
+                      {creation.prompt}
+                    </p>
 
-              <div className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                <p className="text-white text-sm font-medium line-clamp-2 mb-2">
-                  {creation.prompt}
-                </p>
-
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-1">
-                    <Heart
-                      onClick={() => imageLikeToggle(creation.id)}
-                      className={`w-5 h-5 transition-transform hover:scale-110 cursor-pointer ${
-                        creation.likes.includes(user?.id?.toString()) // Convert to string for comparison
-                          ? 'fill-red-500 text-red-500'
-                          : 'text-white/80 hover:text-white'
-                      }`}
-                    />
-                    <span className="text-white text-sm">{creation.likes.length}</span>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-1">
+                        <Heart
+                          onClick={() => imageLikeToggle(creation.id)}
+                          className={`w-5 h-5 transition-all hover:scale-110 cursor-pointer ${
+                            creation.likes.includes(user?.id?.toString())
+                              ? 'fill-red-500 text-red-500'
+                              : 'text-white/80 hover:text-white'
+                          }`}
+                        />
+                        <span className="text-white text-sm">{creation.likes.length}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </section>
+        )}
       </div>
     </div>
   );
