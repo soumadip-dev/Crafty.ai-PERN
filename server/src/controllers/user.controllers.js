@@ -117,6 +117,9 @@ export const toggleLikeCreation = async (req, res) => {
 
     // Retrieve the creation ID from the request body (the creation being liked or unliked)
     const { id } = req.body;
+    if (!id) {
+      return res.status(400).json(new ApiError(400, "Creation ID is required"));
+    }
 
     // Fetch the creation from the database using the provided creation ID
     const creations = await sql`
@@ -126,12 +129,14 @@ export const toggleLikeCreation = async (req, res) => {
     `;
 
     // If the creation is not found, return a 404 error
-    if (!creations) {
+    if (!creations || creations.length === 0) {
       return res.status(404).json(new ApiError(404, "Creation not found"));
     }
 
+    // Get the first creation from the array
+    const creation = creations[0];
     // Get the current list of users who have liked the creation
-    const currentLikes = creations.likes;
+    const currentLikes = creation.likes;
 
     // UserId can be number or string or other types, convert to string because text[] expects string
     const userIdStr = userId.toString();
