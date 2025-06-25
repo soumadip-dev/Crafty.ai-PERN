@@ -1,17 +1,42 @@
 import { useUser } from '@clerk/clerk-react';
 import { useEffect, useState } from 'react';
-import { dummyPublishedCreationData } from '../assets/assets';
 import { Heart } from 'lucide-react';
+import axios from 'axios';
+import { useAuth } from '@clerk/clerk-react';
+import { ClipLoader } from 'react-spinners';
+
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 const Community = () => {
   const [creations, setCreations] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { user } = useUser();
+  const { getToken } = useAuth();
 
+  const fetchCreations = async () => {
+    try {
+      const token = await getToken();
+
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const { data } = await axios.get('/api/v1/user/get-published-creations', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(data);
+
+      if (!data?.success) throw new Error(data?.message || 'Something went wrong');
+      setCreations(data?.data?.creations);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchCreations = () => {
-      setCreations(dummyPublishedCreationData);
-    };
-
     if (user) fetchCreations();
   }, [user]);
 
