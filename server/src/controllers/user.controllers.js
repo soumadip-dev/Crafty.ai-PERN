@@ -50,7 +50,7 @@ export const getUserCreations = async (req, res) => {
         success: false,
       });
     }
-    // If not , return a geberic 500 error
+    // If not , return a generic 500 error
     return res
       .status(500)
       .json(new ApiError(500, "Something went wrong while fetching creations"));
