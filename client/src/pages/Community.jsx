@@ -76,7 +76,7 @@ const Community = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <ClipLoader color="#3B82F6" size={40} />
+        <ClipLoader size={50} color="#16a34a" />
       </div>
     );
   }
@@ -93,11 +93,7 @@ const Community = () => {
           </div>
         ) : (
           <section className="p-4 overflow-y-auto h-full">
-            {' '}
-            {/* Changed to h-full */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-2">
-              {' '}
-              {/* Added pb-2 for padding at bottom */}
               {creations.map((creation, index) => (
                 <div
                   key={index}
