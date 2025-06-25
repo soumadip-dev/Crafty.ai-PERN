@@ -69,7 +69,7 @@ const GenerateImages = () => {
     try {
       setLoading(true);
 
-      const prompt = `You are a professional AI image generator. Create a high-quality image of "${input}" in the style ${selectedStyle}.`;
+      const prompt = `Create a high-quality image of "${input}" in the style ${selectedStyle}.`;
 
       const token = await getToken();
 
