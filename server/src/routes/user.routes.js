@@ -12,7 +12,7 @@ const router = Router();
 router.get("/get-user-creations", auth, getUserCreations);
 
 // Route to get published creations
-router.get("/get-published-creactions", auth, getPublishedCreations);
+router.get("/get-published-creations", auth, getPublishedCreations);
 
 // Route to toggle like creation
 router.post("/toggle-like-creation", auth, toggleLikeCreation);
