@@ -1,4 +1,4 @@
-import { Edit, Hash, Sparkles } from 'lucide-react';
+import { Hash, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 
 const BlogTitle = () => {
