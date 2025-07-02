@@ -18,7 +18,7 @@
 
 ## 🕸️ Live Demo
 
-Experience the live application: [crafty.ai](https://crafty-ai.example.com)
+Experience the live application: [crafty.ai](https://crafty-ai.vercel.app/)
 
 ## 🌟 Features
 
