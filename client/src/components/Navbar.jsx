@@ -21,7 +21,7 @@ const Navbar = () => {
         <UserButton />
       ) : (
         <button
-          className="flex items-center gap-2 rounded-full text-sm font-medium cursor-pointer bg-primary text-white px-10 py-2.5 hover:bg-primary-dark transition-colors"
+          className="flex items-center gap-2 rounded-full text-sm font-medium cursor-pointer bg-gradient-to-r from-red-500 to-green-500 text-white px-10 py-2.5 hover:from-red-600 hover:to-green-600 transition-colors"
           onClick={openSignIn}
         >
           Get started
