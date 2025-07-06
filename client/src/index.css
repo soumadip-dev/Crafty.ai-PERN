@@ -51,3 +51,8 @@
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+.reset-tw,
+.reset-tw * {
+  all: revert !important;
+}
