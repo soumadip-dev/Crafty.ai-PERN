@@ -28,7 +28,7 @@ export const AiToolsData = [
     description:
       'Craft well-written and compelling articles on any subject using advanced AI technology.',
     Icon: SquarePen,
-    bg: { from: '#3588F2', to: '#0BB0D7' },
+    bg: { from: '#FF4D4D', to: '#F9CB28' }, // Red to Yellow gradient
     path: '/ai/write-article',
   },
   {
@@ -36,21 +36,21 @@ export const AiToolsData = [
     description:
       'Discover catchy and relevant blog titles instantly with the help of our smart AI tool.',
     Icon: Hash,
-    bg: { from: '#B153EA', to: '#E549A3' },
+    bg: { from: '#FF6B6B', to: '#FFA3A3' }, // Bright red to light red gradient
     path: '/ai/blog-titles',
   },
   {
     title: 'AI Image Generation',
     description: 'Design eye-catching visuals effortlessly using our intelligent AI image creator.',
     Icon: Image,
-    bg: { from: '#20C363', to: '#11B97E' },
+    bg: { from: '#4ADE80', to: '#22C55E' }, // Green gradient
     path: '/ai/generate-images',
   },
   {
     title: 'Background Removal',
     description: 'Quickly erase backgrounds from your photos with precision using AI-based tools.',
     Icon: Eraser,
-    bg: { from: '#F76C1C', to: '#F04A3C' },
+    bg: { from: '#F97316', to: '#EF4444' }, // Orange to red gradient
     path: '/ai/remove-background',
   },
   {
@@ -58,7 +58,7 @@ export const AiToolsData = [
     description:
       'Easily eliminate unwanted elements from your pictures using intelligent AI editing.',
     Icon: Scissors,
-    bg: { from: '#5C6AF1', to: '#427DF5' },
+    bg: { from: '#EC4899', to: '#F43F5E' }, // Pink to red gradient
     path: '/ai/remove-object',
   },
   {
@@ -66,35 +66,32 @@ export const AiToolsData = [
     description:
       'Enhance your resume with AI-driven suggestions to boost your job application success.',
     Icon: FileText,
-    bg: { from: '#12B7AC', to: '#08B6CE' },
+    bg: { from: '#10B981', to: '#14B8A6' }, // Teal gradient
     path: '/ai/review-resume',
   },
 ];
 
-export const dummyTestimonialData = [
+export const DummyTestimonialData = [
   {
-    image: assets.profile_img_1,
-    name: 'John Doe',
-    title: 'Marketing Director, TechCorp',
-    content:
-      'ContentAI has revolutionized our content workflow. The quality of the articles is outstanding, and it saves us hours of work every week.',
-    rating: 4,
+    name: 'Arjun Patel',
+    title: 'Content Creator',
+    message:
+      'The AI writing tools helped me generate high-quality blog posts in minutes instead of hours. My productivity has increased by 300%!',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200',
   },
   {
-    image: assets.profile_img_1,
-    name: 'Jane Smith',
-    title: 'Content Creator, TechCorp',
-    content:
-      'ContentAI has made our content creation process effortless. The AI tools have helped us produce high-quality content faster than ever before.',
-    rating: 5,
+    name: 'Priya Sharma',
+    title: 'Digital Marketer',
+    message:
+      'Our social media engagement doubled after using the AI image generator. The creative suggestions are perfect for Indian audiences.',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200',
   },
   {
-    image: assets.profile_img_1,
-    name: 'David Lee',
-    title: 'Content Writer, TechCorp',
-    content:
-      'ContentAI has transformed our content creation process. The AI tools have helped us produce high-quality content faster than ever before.',
-    rating: 4,
+    name: 'Rahul Gupta',
+    title: 'Startup Founder',
+    message:
+      'As a non-technical founder, these AI tools helped me create professional content without needing a large team. Game-changer for Indian startups!',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200',
   },
 ];
 
