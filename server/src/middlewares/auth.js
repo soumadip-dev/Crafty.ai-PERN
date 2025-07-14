@@ -1,11 +1,17 @@
 // clerkClient allows us to get user data, update metadata, etc.
 import { clerkClient } from "@clerk/express";
+import { ApiError } from "../utils/api-error";
 
 // Middleware to check userId and hasPremiumPlan
 export const auth = async (req, res, next) => {
   try {
     // authenticate the user:: userId: Id of the loggedin user, has: check if user has a certain plan
     const { userId, has } = await req.auth();
+
+    // Checks if the user is authenticated and has is a function
+    if (!userId || typeof has !== "function") {
+      throw new ApiError(401, "Unauthorized: Invalid user credentials");
+    }
 
     // Checks if the user has a premium subscription ( true or false )
     const hasPremiumPlan = await has({ plan: "premium" });
@@ -31,7 +37,9 @@ export const auth = async (req, res, next) => {
     req.plan = hasPremiumPlan ? "premium" : "free";
     next();
   } catch (error) {
-    console.error(error);
-    res.status(401).json({ success: false, message: "Unauthorized" });
+    console.error("Auth Middleware Error:", error);
+    return res
+      .status(401)
+      .json(new ApiError(401, "Unauthorized", error.errors));
   }
 };
