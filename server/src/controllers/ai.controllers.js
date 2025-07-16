@@ -291,11 +291,16 @@ export const removeImageBackground = async (req, res) => {
       );
     }
 
-    // Upload the image to Cloudinary and remove the background
+    // Step 1: Upload image to Cloudinary
+    // Step 2: While uploading, directly apply background removal effect
+    // Entire operation happens in a single API call
     const { secure_url } = await cloudinary.uploader.upload(image.path, {
       transformation: [
         {
+          // Remove background using Cloudinary's AI model
           effect: "background_removal",
+          // Optional: Explicitly mention default model (remove_the_background)
+          //* Not mandatory – Cloudinary uses this by default if not provided
           background_removal: "remove_the_background",
         },
       ],
@@ -368,18 +373,21 @@ export const removeImageObject = async (req, res) => {
       );
     }
 
-    // Upload the image the Cloudinary and remove the object
+    // Step 1: Upload image to Cloudinary normally (without any transformation)
+    // Goal: Get the image's `public_id` so we can apply transformations later
     const { public_id } = await cloudinary.uploader.upload(image.path);
 
+    // Step 2: Generate transformed URL using Cloudinary's `gen_remove` effect
+    // This removes the specified object from the uploaded image
     const imageUrl = cloudinary.url(public_id, {
       transformation: [{ effect: `gen_remove:${object}` }],
-      resource_type: "image",
+      resource_type: "image", // Explicitly set type for safety
     });
 
     // Insert the image into the database
     await sql`
       INSERT INTO creations (user_id, prompt, content, type) 
-      VALUES (${userId}, ${`Removed ${object} From Image`}, ${secure_url}, 'image')
+      VALUES (${userId}, ${`Removed ${object} From Image`}, ${imageUrl}, 'image')
     `;
 
     // Return the object removed image
