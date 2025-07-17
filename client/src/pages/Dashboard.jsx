@@ -1,17 +1,46 @@
-import React, { useEffect } from 'react';
-import { dummyCreationData } from '../assets/assets';
+import { useState, useEffect } from 'react';
 import { Gem, Sparkles } from 'lucide-react';
 import { Protect } from '@clerk/clerk-react';
 import CreationItem from '../components/CreationItem';
+import axios from 'axios';
+import { useAuth } from '@clerk/clerk-react';
+import toast from 'react-hot-toast';
+import { ClipLoader } from 'react-spinners';
+
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 const Dashboard = () => {
-  const [creations, setCreations] = React.useState([]);
+  const [creations, setCreations] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const { getToken } = useAuth();
+
+  const getDashboardData = async () => {
+    try {
+      const token = await getToken();
+
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const { data } = await axios.get('/api/v1/user/get-user-creations', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(data.data.creations);
+
+      if (!data?.success) throw new Error(data?.message || 'Something went wrong');
+      setCreations(data?.data?.creations);
+    } catch (error) {
+      console.log('API Error:', error);
+      toast.error(error.response?.data?.message || error.message || 'Something went wrong');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // Simulate API fetch
-    const getDashboardData = () => {
-      setCreations(dummyCreationData);
-    };
     getDashboardData();
   }, []);
 
@@ -46,21 +75,31 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Recent Creations Section - Now with constrained height */}
-      <div className="flex-1 flex flex-col">
-        <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3">Recent Creations</h3>
-        <div className="flex-1 overflow-y-auto">
-          <div className="grid gap-2 sm:gap-3">
-            {creations.map(item => (
-              <CreationItem
-                key={item.id}
-                item={item}
-                className="text-sm sm:text-base" // Pass className if CreationItem supports it
-              />
-            ))}
+      {/* Recent Creations Section */}
+      {loading ? (
+        <div className="flex-1 flex items-center justify-center">
+          <ClipLoader size={50} color="#16a34a" />
+        </div>
+      ) : (
+        <div className="flex-1 flex flex-col bg-white rounded-xl shadow-sm overflow-hidden">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-800 p-4">Recent Creations</h3>
+          <div className="flex-1 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 260px)' }}>
+            {creations.length > 0 ? (
+              <div className="grid gap-2 sm:gap-3 p-4">
+                {creations.map(item => (
+                  <CreationItem key={item.id} item={item} className="text-sm sm:text-base" />
+                ))}
+              </div>
+            ) : (
+              <div className="flex-1 flex items-center justify-center p-8">
+                <p className="text-gray-500 text-center">
+                  No creations found. Start creating something new!
+                </p>
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

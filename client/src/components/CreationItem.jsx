@@ -13,7 +13,9 @@ const CreationItem = ({ item }) => {
     >
       <div className="flex justify-between items-start gap-4">
         <div className="flex-1 min-w-0">
-          <h3 className="text-base font-medium text-gray-800 truncate">{item.prompt}</h3>
+          <h3 className="text-base font-medium text-gray-800 break-words line-clamp-2">
+            {item.prompt}
+          </h3>
           <p className="text-sm text-gray-500 mt-1">
             {new Date(item.created_at).toLocaleDateString('en-US', {
               year: 'numeric',
@@ -23,7 +25,7 @@ const CreationItem = ({ item }) => {
           </p>
         </div>
         <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${
+          className={`px-3 py-1 rounded-full text-xs font-medium flex-shrink-0 ${
             item.type === 'image' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
           }`}
         >
@@ -42,7 +44,7 @@ const CreationItem = ({ item }) => {
               />
             </div>
           ) : (
-            <div className="prose prose-sm max-w-none text-gray-700">
+            <div className="prose prose-sm max-w-none text-gray-700 break-words overflow-x-hidden">
               <Markdown>{item.content}</Markdown>
             </div>
           )}
