@@ -1,5 +1,12 @@
 import { Edit, Sparkles } from 'lucide-react';
 import { useState } from 'react';
+import axios from 'axios';
+import { useAuth } from '@clerk/clerk-react';
+import toast from 'react-hot-toast';
+import Markdown from 'react-markdown';
+import { ClipLoader } from 'react-spinners';
+
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 const WriteArticle = () => {
   const articleLengthOptions = [
@@ -10,10 +17,47 @@ const WriteArticle = () => {
 
   const [selectedLength, setSelectedLength] = useState(articleLengthOptions[0]);
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [content, setContent] = useState('');
+
+  const { getToken } = useAuth();
 
   const onSubmitHandler = async e => {
     e.preventDefault();
-    // Article generation logic would go here
+    try {
+      setLoading(true);
+      const prompt = `Write a well-structured article on the topic "${input}" in a ${selectedLength.text} format. Present the key points in a clear, point-wise manner using bullet points or numbered lists. Include an engaging introduction, informative main points, and a concise conclusion. Ensure the tone is professional and easy to understand.`;
+
+      const token = await getToken();
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const { data } = await axios.post(
+        '/api/v1/ai/generate-article',
+        {
+          prompt,
+          length: selectedLength.length,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!data?.success) {
+        throw new Error(data?.message || 'Failed to generate article');
+      }
+
+      setContent(data.data.content);
+    } catch (err) {
+      console.error('API Error:', err);
+      toast.error(err.response?.data?.message || err.message || 'Something went wrong');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,6 +84,7 @@ const WriteArticle = () => {
               placeholder="The future of artificial intelligence is..."
               required
               value={input}
+              disabled={loading}
             />
           </div>
 
@@ -56,6 +101,7 @@ const WriteArticle = () => {
                       : 'text-gray-600 border-gray-200 hover:bg-gray-50'
                   }`}
                   onClick={() => setSelectedLength(item)}
+                  disabled={loading}
                 >
                   {item.text}
                 </button>
@@ -65,10 +111,11 @@ const WriteArticle = () => {
 
           <button
             type="submit"
-            className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-red-600 to-green-500 hover:from-red-700 hover:to-green-600 text-white py-3 px-4 text-sm font-medium rounded-lg transition-all shadow-sm hover:shadow-md"
+            disabled={loading}
+            className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-red-600 to-green-500 hover:from-red-700 hover:to-green-600 text-white py-3 px-4 text-sm font-medium rounded-lg transition-all shadow-sm hover:shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
           >
             <Edit className="w-4 h-4" />
-            Generate Article
+            {loading ? 'Generating...' : 'Generate Article'}
           </button>
         </div>
       </form>
@@ -81,15 +128,26 @@ const WriteArticle = () => {
           </div>
           <h1 className="text-lg sm:text-xl font-semibold">Generated Article</h1>
         </div>
-
-        <div className="min-h-[300px] sm:min-h-[400px] rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 flex flex-col items-center justify-center p-4">
-          <div className="flex flex-col items-center text-center">
-            <Edit className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 mb-3 sm:mb-4" />
-            <p className="text-xs sm:text-sm text-gray-500 max-w-[280px] sm:max-w-md">
-              Enter a topic and click "Generate Article" to get started
-            </p>
+        {loading ? (
+          <div className="min-h-[300px] sm:min-h-[400px] flex items-center justify-center rounded-lg border border-gray-200">
+            <ClipLoader size={50} color="#16a34a" />
           </div>
-        </div>
+        ) : !content ? (
+          <div className="min-h-[300px] sm:min-h-[400px] rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 flex flex-col items-center justify-center p-4">
+            <div className="flex flex-col items-center text-center">
+              <Edit className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 mb-3 sm:mb-4" />
+              <p className="text-xs sm:text-sm text-gray-500 max-w-[280px] sm:max-w-md">
+                Enter a topic and click "Generate Article" to get started
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="min-h-[300px] sm:min-h-[400px] max-h-[600px] overflow-y-auto rounded-lg border border-gray-200 p-4">
+            <div className="prose max-w-none reset-tw">
+              <Markdown>{content}</Markdown>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
