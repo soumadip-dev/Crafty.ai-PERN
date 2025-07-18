@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Github } from 'lucide-react';
 import { assets } from '../assets/assets';
 import { useClerk, UserButton, useUser } from '@clerk/clerk-react';
 
@@ -17,6 +17,17 @@ const Navbar = () => {
         className="w-32 sm:w-44 cursor-pointer hover:opacity-80 transition-opacity"
         onClick={() => navigate('/')}
       />
+      <div className="flex items-center gap-4">
+        <a
+          href="https://github.com/soumadip-dev/Crafty.ai"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-700 hover:text-black transition-colors"
+          aria-label="GitHub repository"
+        >
+          <Github className="w-6 h-6" />
+        </a>
+      </div>
       {user ? (
         <UserButton />
       ) : (
